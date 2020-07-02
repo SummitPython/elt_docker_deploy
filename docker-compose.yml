@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+
+  jornada_etl:
+    container_name: jornada_etl
+    # restart: always
+    build: .
+
+  nginx:
+    container_name: nginx
+    # restart: always
+    image: nginx
+    volumes:
+    - ./docker/webapp_nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+    - "8080:80"
+    environment:
+    - NGINX_HOST=webapp.localhost
+    - NGINX_PORT=80
+    depends_on:
+    - jornada_etl
