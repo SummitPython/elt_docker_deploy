@@ -5,6 +5,9 @@ services:
   jornada_etl:
     container_name: jornada_etl
     # restart: always
+    environment:
+    - RAW_DIR_PATH=/data/raw
+    - TRANSIT_DIR_PATH=/data/transit
     build: .
 
   nginx:
