@@ -51,6 +51,8 @@ response_url_base = requests.request("GET", url_base, headers=headers, data = pa
 RAW_DIR_PATH = os.getenv("RAW_DIR_PATH", os.path.join(os.getcwd(), 'DataFrame', '01_RAW'))
 RAW_DIR = lambda x: os.path.join(RAW_DIR_PATH, re.sub('[^a-zA-Z0-9 \n\.]', '_', x + '.csv'))
 
+TRUSTED_DIR_PATH = os.getenv("TRUSTED_DIR_PATH", os.path.join(os.getcwd(), 'DataFrame', '02_TRUSTED'))
+
 
 # ### Carregando o resultado da chamada
 # ##### A disponibilidade do link é sempre verificada 
@@ -108,7 +110,7 @@ link_num_end = 90
 
 try:
     while link_num_begin < link_num_end:
-        for link_num in range(link_num_begin, (link_num_end + 1)):
+        for link_num in range(link_num_begin, link_num_end):
 
             if re.sub('[^a-zA-Z0-9 \n\.]', '_', url_raw + str(link_num)) + '.csv' in os.listdir(RAW_DIR_PATH):
                 print('DataFrame já carregado', end = '\n')
@@ -132,7 +134,7 @@ finally:
     print('Execução Terminada')
 
 
-# ### Caso de uso tendo coomo base a url final
+# ### Caso de uso tendo como base a url final
 
 # In[12]:
 
@@ -183,14 +185,12 @@ data_link is None
 
 
 maindir = os.getcwd()
-#search_dir = os.getcwd() + '\\DataFrame\\01_raw'
 os.chdir(RAW_DIR_PATH)
 
 files = filter(os.path.isfile, os.listdir(RAW_DIR_PATH)) #selecionando apenas arquivos
 files = [os.path.join(RAW_DIR_PATH, f) for f in files] #adiciona o diretório completo em uma lista
 files.sort(key=lambda x: os.path.getmtime(x)) #ordernacao por ondem de data/hora
 files = [f.replace(RAW_DIR_PATH + os.path.sep, '') for f in files] #linux
-#files = [f.replace(RAW_DIR_PATH + '\\', '') for f in files] #windows
 
 os.chdir(maindir)
 
@@ -222,6 +222,29 @@ locals().update(tabelas) #transformando valores do dicionário em variáveis loc
 
 
 # ___________________________________________________________________________________________________________________________
+
+# ### Empilhando os Dados Baixados
+
+# In[17]:
+
+
+df = pd.DataFrame(None, columns = list(eval(list(tabelas.keys())[0]).head()[0:0]))
+
+
+# In[18]:
+
+
+for f in range(0, len(tabelas)):
+    df = df.append(eval(list(tabelas)[f]))
+    
+df = df.reset_index()
+
+
+# In[19]:
+
+
+df.to_csv(os.path.join(TRUSTED_DIR_PATH, 'all.csv'), index = False)
+
 
 # ### Dividir por estados
 
