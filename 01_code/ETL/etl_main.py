@@ -104,8 +104,8 @@ pd.DataFrame.from_dict(data['results'])    .to_csv(RAW_DIR_FILE, index = False) 
 
 
 link_num = 0
-link_num_begin = 80
-link_num_end = 90
+link_num_begin = 1
+link_num_end = 10
 
 
 try:
@@ -127,7 +127,7 @@ try:
             if link_num_begin == link_num_end:
                 break
                 
-except(TypeError, ConnectionError, JSONDecodeError, requests.exceptions.ConnectTimeout, HTTPError, ReadTimeout, Timeout, requests.exceptions.RequestException):
+except(TypeError, ConnectionError, JSONDecodeError, requests.exceptions.ConnectTimeout, requests.exceptions.HTTPError, requests.exceptions.ReadTimeout, requests.exceptions.Timeout, requests.exceptions.RequestException):
     pass
 
 finally:
@@ -166,7 +166,7 @@ try:
                 if data_link_num['next'] == None:
                     break
                 
-except(TypeError, ConnectionError, JSONDecodeError, requests.exceptions.ConnectTimeout, HTTPError, ReadTimeout, Timeout, requests.exceptions.RequestException):
+except(TypeError, ConnectionError, JSONDecodeError, requests.exceptions.ConnectTimeout, requests.exceptions.HTTPError, requests.exceptions.ReadTimeout, requests.exceptions.Timeout, requests.exceptions.RequestException):
     pass
 
 finally:
@@ -239,6 +239,8 @@ for f in range(0, len(tabelas)):
     
 df = df.reset_index()
 
+del df['index']
+
 
 # In[19]:
 
@@ -248,10 +250,11 @@ df.to_csv(os.path.join(TRUSTED_DIR_PATH, 'all.csv'), index = False)
 
 # ### Dividir por estados
 
-# In[ ]:
+# In[20]:
 
 
-
+for s in set(df.state):
+    df[df.state == s].to_csv(os.path.join(TRUSTED_DIR_PATH, str(s.lower()) + '.csv'), index = False)
 
 
 # dash.plotly.com
