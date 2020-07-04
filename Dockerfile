@@ -4,7 +4,7 @@ SHELL ["/bin/bash", "-c"]
 
 # Copia os arquivos de configuração para seus lugares
 # Configuração do Supervisor
-COPY ./docker/supervisord.conf /etc/supervisord.conf
+COPY ./docker/supervisord.conf /etc/supervisor/supervisord.conf
 # Configuração do agendamento - cron
 COPY ./docker/crontab /etc/cron.d/etl-cron
 # Script de inicialização do container
