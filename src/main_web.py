@@ -13,12 +13,13 @@ from dash.exceptions import PreventUpdate
 app = dash.Dash(__name__)
 
 DF_DIRECTORY = os.getenv(
-    "TRANSIT_DIR_PATH", '/data/transit')
+    "TRUSTED_DIR_PATH", '/data/trusted')
 
 
 def get_state_df(state='rs'):
     try:
-        df = pd.read_csv(os.path.join(DF_DIRECTORY, f'{state.lower()}.csv'))
+        file_name = os.path.join(DF_DIRECTORY, f'{state.lower()}.csv')
+        df = pd.read_csv(file_name)
     except Exception as ex:
         print(ex)
         raise PreventUpdate(

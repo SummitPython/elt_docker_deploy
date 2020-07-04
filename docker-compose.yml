@@ -7,7 +7,7 @@ services:
     # restart: always
     environment:
     - RAW_DIR_PATH=/data/raw
-    - TRANSIT_DIR_PATH=/data/transit
+    - TRUSTED_DIR_PATH=/data/trusted
     build: .
 
   nginx:
